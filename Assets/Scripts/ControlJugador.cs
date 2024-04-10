@@ -10,6 +10,8 @@ public class ControlJugador : MonoBehaviour
 
     public Transform tr_cam;
 
+    public GameObject g_sword;
+
     //Colision y check suelo
     public Transform tr_gCheck;
     public float f_groundDist = 0.1f;
@@ -80,7 +82,7 @@ public class ControlJugador : MonoBehaviour
 
     public void SwordWeightToggle()
     {
-        Debug.Log(isSwordDrawn);
+        g_sword.SetActive(isSwordDrawn);
         animtr.SetLayerWeight(1, isSwordDrawn ? 1 : 0.1f);
     }
 }
