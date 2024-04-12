@@ -16,7 +16,9 @@ public class ControlEnemigo : MonoBehaviour
 
     private float crono = 0;
     public float tiempoActual;
-    private bool parado = false; 
+    private bool parado = false;
+
+    public int vida = 3;
 
     // Start is called before the first frame update
     void Start()
@@ -76,6 +78,7 @@ public class ControlEnemigo : MonoBehaviour
         {
             miAnimator.SetFloat("VelX", 1);
         }
+        miAnimator.SetInteger("Vidas", vida);
     }
 
     public void volverAAndar()
@@ -87,9 +90,16 @@ public class ControlEnemigo : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.transform.tag.Equals("Sword"))
+        {
+            miAnimator.Play("Head Hit");
+            vida--;
+        }
+
         if(other.transform.tag.Equals("Player"))
         {
-            miAnimator.Play("golpear");
+            miAnimator.Play("Attack");
         }
+
     }
 }

@@ -13,6 +13,10 @@ public class ControlJugador : MonoBehaviour
 
     public GameObject g_sword;
 
+    public GameObject g_swordHitbox;
+
+    private float f_runSpeed = 1f;
+
     //Colision y check suelo
     public Transform tr_gCheck;
     public float f_groundDist = 0.1f;
@@ -67,6 +71,7 @@ public class ControlJugador : MonoBehaviour
 
         animtr.SetFloat("vel_y", Mathf.Clamp(v3_anim.z, -1 ,1));
         animtr.SetFloat("vel_x", Mathf.Clamp(v3_anim.x, -1, 1));
+        animtr.SetFloat("runSpeed", f_runSpeed);
         animtr.SetInteger("atkProg", atkProg);
         animtr.SetBool("isDrawn", isSwordDrawn);
     }
@@ -91,7 +96,20 @@ public class ControlJugador : MonoBehaviour
             atkProg++;
             animtr.SetLayerWeight(2, 1);
             mov_vel_private = 0;
-            Debug.Log(atkProg);
+            g_swordHitbox.SetActive(true);
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            f_runSpeed = 2f;
+            mov_vel_private = mov_vel_private * 2;
+        } else if(Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            if (mov_vel_private > mov_vel)
+            {
+                mov_vel_private = mov_vel;
+            }
+            f_runSpeed = 1f;
         }
     }
 
@@ -112,6 +130,7 @@ public class ControlJugador : MonoBehaviour
         animtr.SetLayerWeight(2, 0);
         atkProg = -1;
         mov_vel_private = mov_vel;
+        g_swordHitbox.SetActive(false);
     }
 
     public void SwordWeightToggle()

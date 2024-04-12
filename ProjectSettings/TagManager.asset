@@ -6,6 +6,7 @@ TagManager:
   tags:
   - ManoEnemigo
   - Fuego
+  - Sword
   layers:
   - Default
   - TransparentFX
