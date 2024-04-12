@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,6 +24,8 @@ public class ControlJugador : MonoBehaviour
 
     private float mov_x, mov_y;
 
+    private float mov_vel_private = 0;
+
     private Animator animtr;
     private Transform tr;
     private CharacterController cc_controller;
@@ -30,7 +33,9 @@ public class ControlJugador : MonoBehaviour
     private Vector3 velocity;
 
     // Espada y ataques
+    public float f_animLayerWeight = 0.7f;
     private bool isSwordDrawn = false;
+    private int atkProg = -1;
 
 
     private void Start()
@@ -40,6 +45,7 @@ public class ControlJugador : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         tr = transform;
+        mov_vel_private = mov_vel;
     }
 
 
@@ -47,7 +53,7 @@ public class ControlJugador : MonoBehaviour
     {
         Vector3 v3_move = tr.right * mov_x + tr.forward * mov_y;
         Vector3 v3_anim = Vector3.right * mov_x + Vector3.forward * mov_y;
-        Vector3 v3_moveDelta = v3_move * mov_vel * Time.deltaTime;
+        Vector3 v3_moveDelta = v3_move * mov_vel_private * Time.deltaTime;
         cc_controller.Move(v3_moveDelta);
 
         // Gravedad
@@ -61,6 +67,7 @@ public class ControlJugador : MonoBehaviour
 
         animtr.SetFloat("vel_y", Mathf.Clamp(v3_anim.z, -1 ,1));
         animtr.SetFloat("vel_x", Mathf.Clamp(v3_anim.x, -1, 1));
+        animtr.SetInteger("atkProg", atkProg);
         animtr.SetBool("isDrawn", isSwordDrawn);
     }
 
@@ -78,11 +85,38 @@ public class ControlJugador : MonoBehaviour
         {
             isSwordDrawn = !isSwordDrawn;
         }
+
+        if (Input.GetButtonDown("Fire1") && canAttack())
+        {
+            atkProg++;
+            animtr.SetLayerWeight(2, 1);
+            mov_vel_private = 0;
+            Debug.Log(atkProg);
+        }
+    }
+
+    private bool canAttack()
+    {
+        if (animtr.GetLayerWeight(2) < 1)
+        {
+            return animtr.GetCurrentAnimatorStateInfo(1).normalizedTime >= 0.8f && isSwordDrawn;
+        }
+        else 
+        {
+            return animtr.GetCurrentAnimatorStateInfo(2).normalizedTime >= 0f && isSwordDrawn && atkProg+1+"" == animtr.GetCurrentAnimatorClipInfo(2)[0].clip.name.Substring(6);
+        }  
+    }
+
+    private void resetAttack()
+    {
+        animtr.SetLayerWeight(2, 0);
+        atkProg = -1;
+        mov_vel_private = mov_vel;
     }
 
     public void SwordWeightToggle()
     {
         g_sword.SetActive(isSwordDrawn);
-        animtr.SetLayerWeight(1, isSwordDrawn ? 1 : 0.1f);
+        animtr.SetLayerWeight(1, isSwordDrawn ? 1 : f_animLayerWeight);
     }
 }
