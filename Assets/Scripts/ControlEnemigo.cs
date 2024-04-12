@@ -84,4 +84,12 @@ public class ControlEnemigo : MonoBehaviour
         parado = false;
         crono = 0;
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.transform.tag.Equals("Player"))
+        {
+            miAnimator.Play("golpear");
+        }
+    }
 }
