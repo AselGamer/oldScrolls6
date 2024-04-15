@@ -7,7 +7,7 @@ public class ControlFuego : MonoBehaviour
     private Transform padre;
     private ParticleSystem.EmissionModule emission1, emission2, emission3, 
         emission4;
-    private bool encender;
+    public bool encender;
     private float valor;
     // Start is called before the first frame update
     void Start()
