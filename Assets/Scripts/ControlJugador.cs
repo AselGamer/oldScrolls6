@@ -138,4 +138,9 @@ public class ControlJugador : MonoBehaviour
         g_sword.SetActive(isSwordDrawn);
         animtr.SetLayerWeight(1, isSwordDrawn ? 1 : f_animLayerWeight);
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        
+    }
 }

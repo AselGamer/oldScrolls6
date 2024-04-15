@@ -13,6 +13,7 @@ public class ControlColisionEnemigo : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log(other.transform.name);
         if (other.transform.tag == "Sword")
         {
             crEnemigo.GetHit();
